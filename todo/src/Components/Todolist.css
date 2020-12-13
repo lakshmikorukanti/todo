@@ -1,0 +1,28 @@
+.red {
+    color: red;
+    width: 400px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.green {
+    color: green;
+    width: 400px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+.yellow {
+    color: yellow;
+    width: 400px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 20px;
+}
