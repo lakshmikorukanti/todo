@@ -16,39 +16,44 @@ export default (state = initState, { type, payload }) => {
                 todo: [ ...state.todo, payload ]
             };
         case TOGGLE_STATUS:
-            let target1 = state.todo.find((item) => item.id === payload);
-            target1.status = !target1.status;
-            let data2 = state.todo.filter((item) => (item.id === payload ? target1 : item));
-            saveData('tasks', data2);
-            let target2 = state.todo.filter((item) => item.status == true);
-            saveData('completed', target2);
+            let toggleItem = state.todo.find((item) => item.id === payload);
+            let completedData1 = [];
+            if (toggleItem.status == true) {
+                completedData1 = state.completed.filter((a) => a.id != payload);
+            } else {
+                completedData1 = [ ...state.completed, toggleItem ];
+            }
+            toggleItem.status = !toggleItem.status;
+            let toggleData = state.todo.filter((item) => (item.id === payload ? toggleItem : item));
+            saveData('tasks', toggleData);
+            saveData('completed', completedData1);
             return {
                 ...state,
-                completed: target2,
-                todo: state.todo.filter((item) => (item.id === payload ? target1 : item))
+                completed: completedData1,
+                todo: state.todo.filter((item) => (item.id === payload ? toggleItem : item))
             };
         case RESET_DATA:
             for (let i = 0; i < state.todo.length; i++) {
                 state.todo[i].status = false;
             }
             saveData('tasks', state.todo);
-            console.log(state.todo);
+            saveData('completed', []);
+
             return {
                 ...state,
                 todo: state.todo,
                 completed: []
             };
         case DELETE_TODO:
-            let data1 = state.todo.filter((item) => item.id !== payload);
-            saveData('tasks', data1);
-
-            let target4 = state.todo.filter((item) => item.status == true);
-            saveData('completed', target4);
+            let task = state.todo.filter((item) => item.id !== payload);
+            saveData('tasks', task);
+            let completedData = state.completed.filter((item) => item.id !== payload);
+            saveData('completed', completedData);
 
             return {
                 ...state,
                 todo: state.todo.filter((item) => item.id !== payload),
-                completed: target4
+                completed: completedData
             };
         default:
             return state;

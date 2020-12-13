@@ -6,7 +6,7 @@
     background-color: white;
     border-radius: 20px;
     margin-top: 10px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Comic Sans MS;
 }
 .green {
     color: green;
@@ -18,7 +18,7 @@
     margin-top: 20px;
 }
 .yellow {
-    color: yellow;
+    color: teal;
     width: 400px;
     border: 1px solid black;
     padding: 20px;

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { addTodo, resetData } from '../redux/actions';
 import { TextField, Grid, Button } from '@material-ui/core';
+import { loadData, saveData } from '../redux/localstorage';
 import Todolist from './Todolist';
 const useStyles = makeStyles((theme) => ({
     align: {
@@ -31,6 +32,8 @@ export default function Todo() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [ todo, setTodo ] = useState('');
+    let filter = loadData('filterBy') || 'all';
+    const [ filterBy, setfilter ] = useState(filter);
     const handleTodo = (e) => {
         e.preventDefault();
         dispatch(addTodo(todo));
@@ -39,6 +42,14 @@ export default function Todo() {
     const handleReset = (e) => {
         e.preventDefault();
         dispatch(resetData('reset'));
+    };
+    const handleAll = () => {
+        setfilter('all');
+        saveData('filterBy', 'all');
+    };
+    const handleHash = () => {
+        setfilter('hash');
+        saveData('filterBy', 'hash');
     };
     const handleKey = (e) => {
         e.preventDefault();
@@ -87,11 +98,27 @@ export default function Todo() {
                         >
                             Reset
                         </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={(e) => handleAll(e)}
+                            className={classes.button}
+                        >
+                            All
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={(e) => handleHash(e)}
+                            className={classes.button}
+                        >
+                            #
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
             <Grid item lg={6}>
-                <Todolist />
+                <Todolist filterBy={filterBy} />
             </Grid>
         </Grid>
     );
