@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { addTodo, resetData } from '../redux/actions';
-import { TextField, Grid, Button } from '@material-ui/core';
+import { TextField, Grid } from '@material-ui/core';
 import { loadData, saveData } from '../redux/localstorage';
 import Todolist from './Todolist';
+import ButtonComp from './Button';
 const useStyles = makeStyles((theme) => ({
     align: {
-        height: '1000px'
+        height: '100%'
     },
     formM: {
         marginTop: '25%',
@@ -16,27 +17,24 @@ const useStyles = makeStyles((theme) => ({
         width: '400px',
         marginLeft: '14%'
     },
-    button: {
-        margin: '30px',
-        padding: '10px 20px',
-        borderRadius: '10px'
-    },
-    addButton: {
-        marginLeft: '30px',
-        padding: '10px 30px',
-        marginTop: '5px',
-        borderRadius: '10px'
+    formControl: {
+        margin: theme.spacing(1),
+        width: '100%'
     }
 }));
 export default function Todo() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [ todo, setTodo ] = useState('');
+    const [ todoItem, setTodo ] = useState('');
     let filter = loadData('filterBy') || 'all';
+    const [ hashValue, setHashValue ] = useState('');
     const [ filterBy, setfilter ] = useState(filter);
+    const { todo } = useSelector((state) => state.app);
+    let hashData = todo.filter((a) => a.title[0] == '#');
+    console.log(hashData, hashValue);
     const handleTodo = (e) => {
         e.preventDefault();
-        dispatch(addTodo(todo));
+        dispatch(addTodo(todoItem));
         setTodo('');
     };
     const handleReset = (e) => {
@@ -47,8 +45,9 @@ export default function Todo() {
         setfilter('all');
         saveData('filterBy', 'all');
     };
-    const handleHash = () => {
-        setfilter('hash');
+    const handleHash = (e) => {
+        setfilter(e.target.value);
+        console.log(filterBy);
         saveData('filterBy', 'hash');
     };
     const handleKey = (e) => {
@@ -66,8 +65,8 @@ export default function Todo() {
     };
     return (
         <Grid container item lg={12}>
-            <Grid item lg={6} className={classes.align}>
-                <Grid className={classes.formM}>
+            <Grid item lg={6} className={classes.align} sm={12} md={12} xs={12}>
+                <Grid className={classes.formM} lg={12}>
                     <Grid>
                         <TextField
                             id="outlined-basic"
@@ -75,49 +74,21 @@ export default function Todo() {
                             variant="outlined"
                             type="text"
                             placeholder="add task..."
-                            value={todo}
+                            value={todoItem}
                             onKeyUp={(e) => handleKey(e)}
                             onChange={(e) => setTodo(e.target.value)}
                         />
 
-                        <Button
-                            variant="contained"
-                            className={classes.addButton}
-                            color="primary"
-                            onClick={(e) => handleTodo(e)}
-                        >
-                            Add
-                        </Button>
+                        <ButtonComp handlefun={handleTodo} variable="Add" />
                     </Grid>
                     <Grid>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={(e) => handleReset(e)}
-                            className={classes.button}
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={(e) => handleAll(e)}
-                            className={classes.button}
-                        >
-                            All
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={(e) => handleHash(e)}
-                            className={classes.button}
-                        >
-                            #
-                        </Button>
+                        <ButtonComp handlefun={handleReset} variable="Reset" />
+                        <ButtonComp handlefun={handleAll} variable="All" />
+                        <ButtonComp handlefun={handleHash} variable="#" />
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item lg={6}>
+            <Grid item lg={6} sm={12} md={12} xs={12}>
                 <Todolist filterBy={filterBy} />
             </Grid>
         </Grid>

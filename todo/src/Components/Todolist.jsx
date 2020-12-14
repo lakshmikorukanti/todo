@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTodo, deleteTodo } from '../redux/actions';
 import { Grid } from '@material-ui/core';
-import { loadData, saveData } from '../redux/localstorage';
 import './Todolist.css';
 import Item from './Item';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 export default function Todolist({ filterBy }) {
     const { todo } = useSelector((state) => state.app);
     const { completed } = useSelector((state) => state.app);
+    const [ filterData, setFilterData ] = useState([]);
     var todoData = [];
     var completedData = [];
     if (filterBy == 'hash') {
@@ -24,20 +25,33 @@ export default function Todolist({ filterBy }) {
     const handleDelete = (id) => {
         dispatch(deleteTodo(id));
     };
+    const handleHash = (a) => {
+        let data = [];
+        for (let i = 0; i < todo.length; i++) {
+            let x = -1;
+            x = todo[i].title.indexOf(a);
+            if (x != -1) {
+                data.push(todo[i]);
+            }
+        }
+        setFilterData(data);
+        console.log(data);
+    };
     return (
-        <Grid style={{ padding: '30px', alignItems: 'center', paddingLeft: '20%' }}>
-            <Grid style={{ backgroundColor: 'white', padding: '30px' }}>
+        <Grid className="main" sm={12} md={12} xs={12}>
+            <Grid className="taskDiv">
                 <h1>Incomplete task:</h1>
                 {todoData.map(
                     (a) =>
                         a.title[0] == '#' && a.status == false ? (
-                            <Item
-                                styling="yellow"
-                                handleDelete={handleDelete}
-                                handleToggle={handleToggle}
-                                a={a}
-                                key={a.id}
-                            />
+                            <Grid item container lg={12} key={a.id} className="yellow">
+                                <Grid item lg={9} onClick={() => handleHash(a.title)}>
+                                    {a.title}
+                                </Grid>
+                                <Grid item lg={3} onClick={() => handleDelete(a.id)}>
+                                    <DeleteForeverIcon />
+                                </Grid>
+                            </Grid>
                         ) : a.status == false ? (
                             <Item
                                 styling="red"
@@ -49,7 +63,7 @@ export default function Todolist({ filterBy }) {
                         ) : null
                 )}
             </Grid>
-            <Grid style={{ backgroundColor: 'white', padding: '30px', marginTop: '20px' }}>
+            <Grid className="taskDiv">
                 <h1>Completed Task:</h1>
                 {completedData.map(
                     (a) =>
@@ -63,6 +77,20 @@ export default function Todolist({ filterBy }) {
                             />
                         ) : null
                 )}
+            </Grid>
+            <Grid>
+                {filterData.length > 0 ? (
+                    <Grid className="taskDiv">
+                        <h1>After Filtering:</h1>
+                        {filterData.map((a) => (
+                            <Grid item container lg={12} key={a.id} className="yellow">
+                                <Grid item lg={9}>
+                                    {a.title}
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </Grid>
+                ) : null}
             </Grid>
         </Grid>
     );
