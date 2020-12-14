@@ -33,19 +33,23 @@ export default function Todo() {
     let hashData = todo.filter((a) => a.title[0] == '#');
     console.log(hashData, hashValue);
     const handleTodo = (e) => {
+        //adding todo to the store
         e.preventDefault();
         dispatch(addTodo(todoItem));
         setTodo('');
     };
     const handleReset = (e) => {
+        // resets to inital values
         e.preventDefault();
         dispatch(resetData('reset'));
     };
     const handleAll = () => {
+        //filtering by all
         setfilter('all');
         saveData('filterBy', 'all');
     };
     const handleHash = (e) => {
+        //filtering by tasks which start with #
         setfilter(e.target.value);
         console.log(filterBy);
         saveData('filterBy', 'hash');
@@ -64,9 +68,10 @@ export default function Todo() {
         }
     };
     return (
+        //input tag and buttons for add,reset,# and all
         <Grid container item lg={12}>
             <Grid item lg={6} className={classes.align} sm={12} md={12} xs={12}>
-                <Grid className={classes.formM} lg={12}>
+                <Grid className={classes.formM} item lg={12}>
                     <Grid>
                         <TextField
                             id="outlined-basic"

@@ -11,6 +11,7 @@ export default function Todolist({ filterBy }) {
     const [ filterData, setFilterData ] = useState([]);
     var todoData = [];
     var completedData = [];
+    //filtering with hash as starting letter and storing it into localstorage
     if (filterBy == 'hash') {
         todoData = todo.filter((a) => a.title[0] == '#');
         completedData = completed.filter((a) => a.title[0] == '#');
@@ -20,12 +21,15 @@ export default function Todolist({ filterBy }) {
     }
     const dispatch = useDispatch();
     const handleToggle = (id) => {
+        //toggling the status of the todo
         dispatch(toggleTodo(id));
     };
     const handleDelete = (id) => {
+        //deleting the todo
         dispatch(deleteTodo(id));
     };
     const handleHash = (a) => {
+        //filtering all the hash todos
         let data = [];
         for (let i = 0; i < todo.length; i++) {
             let x = -1;
@@ -38,7 +42,8 @@ export default function Todolist({ filterBy }) {
         console.log(data);
     };
     return (
-        <Grid className="main" sm={12} md={12} xs={12}>
+        //maping of incomplete task,completed tasks and filtered tasks
+        <Grid className="main" item sm={12} md={12} xs={12}>
             <Grid className="taskDiv">
                 <h1>Incomplete task:</h1>
                 {todoData.map(
@@ -78,6 +83,7 @@ export default function Todolist({ filterBy }) {
                         ) : null
                 )}
             </Grid>
+
             <Grid>
                 {filterData.length > 0 ? (
                     <Grid className="taskDiv">

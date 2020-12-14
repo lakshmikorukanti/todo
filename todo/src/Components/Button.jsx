@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonComp({ handlefun, variable }) {
     const classes = useStyles();
     return (
+        //button for add,reset,filter by # and all
         <Button
             variant="contained"
             color="secondary"
